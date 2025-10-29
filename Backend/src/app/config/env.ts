@@ -4,11 +4,13 @@ dotenv.config();
 
 type EnvType = {
     PORT : string;
+    DB_URI : string;
 }
 
 const envVarsFn = (): EnvType => {
     const requiredEnvVars : string[] = [
-        "PORT"
+        "PORT",
+        "DB_URI"
     ];
 
     requiredEnvVars.forEach((key : string)=> {
@@ -18,7 +20,8 @@ const envVarsFn = (): EnvType => {
     })
 
     return {
-        PORT : process.env.PORT as string
+        PORT : process.env.PORT as string,
+        DB_URI : process.env.DB_URI as string,
     }
 }
 
