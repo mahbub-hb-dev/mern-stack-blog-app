@@ -5,7 +5,7 @@ import { Separator } from "@/components/ui/separator";
 import { useLoginMutation } from "@/redux/module/auth/auth.api";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { toast } from "sonner";
 
 import { z } from "zod";
@@ -18,6 +18,8 @@ const formSchema = z.object({
 function Login() {
 
     const [login] = useLoginMutation();
+
+    const navigate = useNavigate()
 
     const form = useForm<z.infer<typeof formSchema>>({
         defaultValues: {
@@ -32,9 +34,8 @@ function Login() {
             if(res.status == "success") {
                 toast.success("You are logged in successfully");
             }
+            navigate("/me");
 
-            console.log(res)
-            
         } catch (error) {
             toast.error(("Login failed"));
             console.log(error);
