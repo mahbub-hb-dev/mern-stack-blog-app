@@ -12,6 +12,7 @@
   "license": "ISC",
   "description": "",
   "devDependencies": {
+    "@types/cors": "^2.8.19",
     "concurrently": "^9.2.1",
     "nodemon": "^3.1.10",
     "typescript": "^5.9.3"
@@ -19,6 +20,7 @@
   "dependencies": {
     "@types/express": "^5.0.4",
     "bcryptjs": "^3.0.2",
+    "cors": "^2.8.5",
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
     "http-status-codes": "^2.3.0",
