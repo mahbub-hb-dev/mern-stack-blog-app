@@ -1,14 +1,17 @@
 import { User } from "../user/user.model.js";
 import bcrypt, { hash } from "bcryptjs";
+import jwt from "jsonwebtoken";
 const login = async (payload, res) => {
     const { email, password } = payload;
-    const isUserExist = await User.findOne({ email });
+    // Include password explicitly because schema has `select: false` for password
+    const isUserExist = await User.findOne({ email }).select("+password");
     if (!isUserExist) {
         res.status(400).json({
             status: "error",
-            // message : "user dosen't exist"
             message: "email dosen't match"
         });
+        // stop further execution since response already sent
+        return null;
     }
     const isPasswordMatch = await bcrypt.compare(password, isUserExist?.password);
     if (!isPasswordMatch) {
@@ -16,15 +19,23 @@ const login = async (payload, res) => {
             status: "error",
             message: "password dosen't match"
         });
+        // stop further execution since response already sent
+        return null;
     }
-    const loginUser = {
+    const tokenPayload = {
         name: isUserExist?.name,
         email: isUserExist?.email,
         avatar: isUserExist?.avatar,
         isVerified: isUserExist?.isVerified,
         isPremium: isUserExist?.isPremium
     };
-    return loginUser;
+    const accessToken = jwt.sign(tokenPayload, "secret", {
+        expiresIn: "1h"
+    });
+    res.cookie("accessToken", accessToken);
+    return {
+        accessToken,
+    };
 };
 export const AuthServices = {
     login

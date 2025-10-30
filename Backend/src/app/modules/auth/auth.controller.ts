@@ -6,15 +6,12 @@ import { AuthServices } from "./auth.services.js";
 const login = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
 
-        const user = await AuthServices.login(req.body, res);
+        const data = await AuthServices.login(req.body, res);
 
-        // AuthServices may have already sent a response on error and returned null.
-        if (!user) return;
-
-        res.status(httpStatus.OK).json({
+        res.status(httpStatus.CREATED).json({
             status : "success",
             message : "user logged in successfully",
-            user : user
+            data
         })
     }
 )
